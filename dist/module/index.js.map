@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.ts"],"names":["SwipeableCards"],"mappings":"AAAA,SAASA,cAAT,QAA+B,kBAA/B","sourcesContent":["export { SwipeableCards } from \"./SwipeableCards\";\n"]}

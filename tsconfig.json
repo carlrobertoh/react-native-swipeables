@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "target": "esnext",
+    "module": "commonjs",
+    "lib": ["es2017"],
+    "moduleResolution": "node",
+    "types": ["react"],
+    "jsx": "react-native",
+    "sourceMap": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowSyntheticDefaultImports": true,
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
