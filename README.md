@@ -13,27 +13,30 @@ npm install react-native-swipeables
 import { SwipeableCards } from "react-native-swipeables";
 ```
 
-```
+```typescript jsx
 <SwipeableCards
+  enableActionTags
   data={[
     {
-      id: '1',
-      name: 'Ben',
+      item: { name: 'Ben' },
+      render: ({ name }) => (
+        <View style={styles.card}>
+          <Text>{name}</Text>
+        </View>
+      ),
     },
     {
-      id: '2',
-      name: 'Joshi',
+      item: { name: 'Holly' },
+      render: ({ name }) => (
+        <View style={styles.card}>
+          <Text>{name}</Text>
+        </View>
+      ),
     },
-  ].map(item => ({
-    item,
-    render: ({ name, id }) => (
-      <Text>
-        {id}, {name}
-      </Text>
-    ),
-  }))}
+  ]}
   onChange={(item, action) => {
     // handle event
+    console.debug(`${item.name} was ${action}d`);
   }}
 />
 ```
