@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Animated, Dimensions, PanResponder } from 'react-native';
 
-type ActionType = 'like' | 'dislike';
+type Direction = 'left' | 'right';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export const useAnimation = (props: {
-  onSwipe: (selectedIndex: number, actionType: ActionType) => void;
+  onSwipe: (selectedIndex: number, direction: Direction) => void;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const position = new Animated.ValueXY();
@@ -15,7 +15,7 @@ export const useAnimation = (props: {
     onPanResponderMove: (_, gestureState) =>
       position.setValue({ x: gestureState.dx, y: gestureState.dy }),
     onPanResponderRelease: (_, gestureState) => {
-      const animate = (toX: number, action: ActionType) => {
+      const animate = (toX: number, direction: Direction) => {
         Animated.spring(position, {
           useNativeDriver: true,
           toValue: { x: toX, y: gestureState.dy },
@@ -23,14 +23,14 @@ export const useAnimation = (props: {
           position.setValue({ x: 0, y: 0 });
         });
         setCurrentIndex(prevIndex => prevIndex + 1);
-        props.onSwipe(currentIndex, action);
+        props.onSwipe(currentIndex, direction);
       };
 
       if (gestureState.dx > 120) {
-        return animate(SCREEN_WIDTH + 100, 'like');
+        return animate(SCREEN_WIDTH + 100, 'right');
       }
       if (gestureState.dx < -120) {
-        return animate(-SCREEN_WIDTH - 100, 'dislike');
+        return animate(-SCREEN_WIDTH - 100, 'left');
       }
       Animated.spring(position, {
         useNativeDriver: true,

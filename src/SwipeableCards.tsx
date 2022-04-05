@@ -5,7 +5,7 @@ import { Animated } from 'react-native';
 import { ActionTag } from './ActionTag';
 import { interpolate, useAnimation } from './useAnimation';
 
-type ActionType = 'like' | 'dislike';
+type Direction = 'left' | 'right';
 
 interface ItemDefinition<T> {
   item: T;
@@ -14,7 +14,7 @@ interface ItemDefinition<T> {
 
 interface Props<T extends object> {
   data: ItemDefinition<T>[];
-  onChange: (item: T, action: ActionType) => void;
+  onChange: (item: T, direction: Direction) => void;
   enableActionTags?: boolean;
 }
 

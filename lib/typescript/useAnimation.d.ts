@@ -1,7 +1,7 @@
 import { Animated } from 'react-native';
-declare type ActionType = 'like' | 'dislike';
+declare type Direction = 'left' | 'right';
 export declare const useAnimation: (props: {
-    onSwipe: (selectedIndex: number, actionType: ActionType) => void;
+    onSwipe: (selectedIndex: number, direction: Direction) => void;
 }) => {
     currentIndex: number;
     position: Animated.ValueXY;
