@@ -15,7 +15,6 @@ import { SwipeableCards } from "react-native-swipeables";
 
 ```typescript jsx
 <SwipeableCards
-  enableActionTags
   data={[
     {
       item: { name: 'Ben' },
@@ -35,8 +34,7 @@ import { SwipeableCards } from "react-native-swipeables";
     },
   ]}
   onChange={(item, action) => {
-    // handle event
-    console.debug(`${item.name} was ${action}d`);
+    // handle callback
   }}
 />
 ```
