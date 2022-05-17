@@ -2,32 +2,43 @@ import React, { PropsWithChildren } from 'react';
 
 import { Animated, StyleSheet, Text } from 'react-native';
 
+import { Direction } from './types';
+
 interface Props {
   opacity: Animated.AnimatedInterpolation;
-  isLikeAction?: boolean;
+  direction?: Direction;
 }
 
-export const ActionTag = ({
-  isLikeAction,
-  ...props
-}: PropsWithChildren<Props>) => (
-  <Animated.View
-    style={{
-      ...styles.container,
-      ...(isLikeAction ? { left: 40 } : { right: 40 }),
-      opacity: props.opacity,
-      transform: [{ rotate: `${isLikeAction ? '-30' : '30'}deg` }],
-    }}>
-    <Text
+export const ActionTag = ({ direction, ...props }: PropsWithChildren<Props>) => {
+  const color = (() => {
+    if (direction === 'left') {
+      return 'red';
+    }
+    if (direction === 'top') {
+      return 'blue';
+    }
+    return 'green';
+  })();
+
+  return (
+    <Animated.View
       style={{
-        ...styles.box,
-        borderColor: isLikeAction ? 'green' : 'red',
-        color: isLikeAction ? 'green' : 'red',
+        ...styles.container,
+        ...(direction === 'right' ? { left: 40 } : { right: 40 }),
+        opacity: props.opacity,
+        transform: [{ rotate: `${direction === 'right' ? '-30' : '30'}deg` }],
       }}>
-      {props.children}
-    </Text>
-  </Animated.View>
-);
+      <Text
+        style={{
+          ...styles.box,
+          color,
+          borderColor: color,
+        }}>
+        {props.children}
+      </Text>
+    </Animated.View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

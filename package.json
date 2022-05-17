@@ -1,6 +1,6 @@
 {
   "name": "react-native-swipeables",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
   "react-native": "src/index.ts",
@@ -8,7 +8,10 @@
   "scripts": {
     "build": "bob build"
   },
-  "files": ["lib/", "src/"],
+  "files": [
+    "lib/",
+    "src/"
+  ],
   "dependencies": {
     "react": "17.0.2",
     "react-native": "0.67.3"
@@ -16,10 +19,11 @@
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/runtime": "^7.12.5",
-    "@types/react-native": "^0.66.15",
     "@react-native-community/bob": "^0.17.1",
+    "@types/react-native": "^0.66.15",
     "babel-plugin-optional-require": "^0.3.1",
-    "typescript": "^4.4.4"
+    "typescript": "^4.4.4",
+    "prettier": "^2.6.2"
   },
   "resolutions": {
     "@types/react": "^17"
@@ -27,6 +31,9 @@
   "@react-native-community/bob": {
     "source": "src",
     "output": "lib",
-    "targets": ["module", "typescript"]
+    "targets": [
+      "module",
+      "typescript"
+    ]
   }
 }

@@ -1,5 +1,5 @@
 import { Animated } from 'react-native';
-declare type Direction = 'left' | 'right';
+import { Direction } from './types';
 export declare const useAnimation: (props: {
     onSwipe: (selectedIndex: number, direction: Direction) => void;
 }) => {
@@ -17,11 +17,12 @@ export declare const useAnimation: (props: {
     interpolateConfig: {
         rotate: Animated.AnimatedInterpolation;
         likeOpacity: Animated.AnimatedInterpolation;
+        superLikeOpacity: Animated.AnimatedInterpolation;
         nopeOpacity: Animated.AnimatedInterpolation;
         nextCardOpacity: Animated.AnimatedInterpolation;
         nextCardScale: Animated.AnimatedInterpolation;
     };
     panHandlers: import("react-native").GestureResponderHandlers;
 };
-export declare const interpolate: (outputRange: number[] | string[], position: Animated.ValueXY) => Animated.AnimatedInterpolation;
-export {};
+export declare const interpolateX: (outputRange: number[] | string[], position: Animated.ValueXY) => Animated.AnimatedInterpolation;
+export declare const interpolateY: (outputRange: number[] | string[], position: Animated.ValueXY) => Animated.AnimatedInterpolation;

@@ -3,42 +3,48 @@ import React from 'react';
 import { Animated } from 'react-native';
 
 import { ActionTag } from './ActionTag';
-import { interpolate, useAnimation } from './useAnimation';
-
-type Direction = 'left' | 'right';
+import { Direction } from './types';
+import { interpolateX, useAnimation } from './useAnimation';
 
 interface ItemDefinition<T> {
   item: T;
   render: (item: T) => React.ReactNode;
 }
 
+interface ActionTagDetails {
+  enableTags: boolean;
+  labels: {
+    left: string;
+    right: string;
+    top: string;
+  };
+}
+
 interface Props<T extends object> {
   data: ItemDefinition<T>[];
   onChange: (item: T, direction: Direction) => void;
-  enableActionTags?: boolean;
+  actionTagDetails?: Partial<ActionTagDetails>;
 }
 
-export const SwipeableCards = <T extends object>({enableActionTags = true, ...props}: Props<T>) => {
+export const SwipeableCards = <T extends object>({
+  actionTagDetails = { enableTags: true },
+  ...props
+}: Props<T>) => {
   const data = props.data.map((item, i) => ({ ...item, index: i }));
-  const {
-    currentIndex,
-    position,
-    rotateAndTranslate,
-    interpolateConfig,
-    panHandlers,
-  } = useAnimation({
-    onSwipe: (selectedIndex, actionType) => {
-      const itemDefinition = data.find(i => i.index === selectedIndex);
-      if (itemDefinition) {
-        props.onChange(itemDefinition.item, actionType);
-      }
-    },
-  });
+  const { currentIndex, position, rotateAndTranslate, interpolateConfig, panHandlers } =
+    useAnimation({
+      onSwipe: (selectedIndex, direction) => {
+        const itemDefinition = data.find((i) => i.index === selectedIndex);
+        if (itemDefinition) {
+          props.onChange(itemDefinition.item, direction);
+        }
+      },
+    });
 
   return (
     <>
       {data
-        .map(itemDefinition => {
+        .map((itemDefinition) => {
           if (itemDefinition.index < currentIndex) {
             return null;
           }
@@ -48,15 +54,16 @@ export const SwipeableCards = <T extends object>({enableActionTags = true, ...pr
                 {...panHandlers}
                 key={itemDefinition.index}
                 style={[rotateAndTranslate]}>
-                {enableActionTags && (
+                {actionTagDetails?.enableTags && (
                   <>
-                    <ActionTag
-                      isLikeAction
-                      opacity={interpolateConfig.likeOpacity}>
-                      LIKE
+                    <ActionTag direction="left" opacity={interpolateConfig.nopeOpacity}>
+                      {actionTagDetails.labels?.left || 'NOPE'}
                     </ActionTag>
-                    <ActionTag opacity={interpolateConfig.nopeOpacity}>
-                      NOPE
+                    <ActionTag direction="right" opacity={interpolateConfig.likeOpacity}>
+                      {actionTagDetails.labels?.right || 'LIKE'}
+                    </ActionTag>
+                    <ActionTag direction="top" opacity={interpolateConfig.superLikeOpacity}>
+                      {actionTagDetails.labels?.top || 'SUPER LIKE'}
                     </ActionTag>
                   </>
                 )}
@@ -69,8 +76,8 @@ export const SwipeableCards = <T extends object>({enableActionTags = true, ...pr
             <Animated.View
               key={itemDefinition.index}
               style={{
-                opacity: interpolate([1, 0, 1], position),
-                transform: [{ scale: interpolate([1, 0.8, 1], position) }],
+                opacity: interpolateX([1, 0, 1], position),
+                transform: [{ scale: interpolateX([1, 0.8, 1], position) }],
               }}>
               {itemDefinition.render(itemDefinition.item)}
             </Animated.View>

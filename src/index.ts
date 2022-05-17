@@ -1,1 +1,1 @@
-export { SwipeableCards } from "./SwipeableCards";
+export { SwipeableCards } from './SwipeableCards';

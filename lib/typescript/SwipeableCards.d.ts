@@ -1,13 +1,21 @@
 import React from 'react';
-declare type Direction = 'left' | 'right';
+import { Direction } from './types';
 interface ItemDefinition<T> {
     item: T;
     render: (item: T) => React.ReactNode;
 }
+interface ActionTagDetails {
+    enableTags: boolean;
+    labels: {
+        left: string;
+        right: string;
+        top: string;
+    };
+}
 interface Props<T extends object> {
     data: ItemDefinition<T>[];
     onChange: (item: T, direction: Direction) => void;
-    enableActionTags?: boolean;
+    actionTagDetails?: Partial<ActionTagDetails>;
 }
-export declare const SwipeableCards: <T extends object>({ enableActionTags, ...props }: Props<T>) => JSX.Element;
+export declare const SwipeableCards: <T extends object>({ actionTagDetails, ...props }: Props<T>) => JSX.Element;
 export {};

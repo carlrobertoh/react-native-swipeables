@@ -1,36 +1,42 @@
 import { useState } from 'react';
+
 import { Animated, Dimensions, PanResponder } from 'react-native';
 
-type Direction = 'left' | 'right';
+import { Direction } from './types';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 export const useAnimation = (props: {
   onSwipe: (selectedIndex: number, direction: Direction) => void;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const position = new Animated.ValueXY();
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (_, gestureState) =>
       position.setValue({ x: gestureState.dx, y: gestureState.dy }),
     onPanResponderRelease: (_, gestureState) => {
-      const animate = (toX: number, direction: Direction) => {
+      const animate = (toValue: { x: number; y: number }, direction: Direction) => {
         Animated.spring(position, {
+          toValue,
           useNativeDriver: true,
-          toValue: { x: toX, y: gestureState.dy },
         }).start(() => {
           position.setValue({ x: 0, y: 0 });
         });
-        setCurrentIndex(prevIndex => prevIndex + 1);
+        setCurrentIndex((prevIndex) => prevIndex + 1);
         props.onSwipe(currentIndex, direction);
       };
 
       if (gestureState.dx > 120) {
-        return animate(SCREEN_WIDTH + 100, 'right');
+        return animate({ x: SCREEN_WIDTH + 100, y: gestureState.dy }, 'right');
       }
       if (gestureState.dx < -120) {
-        return animate(-SCREEN_WIDTH - 100, 'left');
+        return animate({ x: -SCREEN_WIDTH - 100, y: gestureState.dy }, 'left');
+      }
+      if (gestureState.dy < -120) {
+        return animate({ x: gestureState.dx, y: -SCREEN_HEIGHT - 100 }, 'top');
       }
       Animated.spring(position, {
         useNativeDriver: true,
@@ -39,15 +45,14 @@ export const useAnimation = (props: {
       }).start();
     },
   });
-
   const interpolateConfig = {
-    rotate: interpolate(['-10deg', '0deg', '10deg'], position),
-    likeOpacity: interpolate([0, 0, 1], position),
-    nopeOpacity: interpolate([1, 0, 0], position),
-    nextCardOpacity: interpolate([1, 0, 1], position),
-    nextCardScale: interpolate([1, 0.8, 1], position),
+    rotate: interpolateX(['-10deg', '0deg', '10deg'], position),
+    likeOpacity: interpolateX([0, 0, 1], position),
+    superLikeOpacity: interpolateY([1, 0, 0], position),
+    nopeOpacity: interpolateX([1, 0, 0], position),
+    nextCardOpacity: interpolateX([1, 0, 1], position),
+    nextCardScale: interpolateX([1, 0.8, 1], position),
   };
-
   const rotateAndTranslate = {
     transform: [
       {
@@ -66,12 +71,16 @@ export const useAnimation = (props: {
   };
 };
 
-export const interpolate = (
-  outputRange: number[] | string[],
-  position: Animated.ValueXY,
-) =>
+export const interpolateX = (outputRange: number[] | string[], position: Animated.ValueXY) =>
   position.x.interpolate({
     outputRange,
     inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+    extrapolate: 'clamp',
+  });
+
+export const interpolateY = (outputRange: number[] | string[], position: Animated.ValueXY) =>
+  position.y.interpolate({
+    outputRange,
+    inputRange: [-SCREEN_HEIGHT / 2, 0, SCREEN_HEIGHT / 2],
     extrapolate: 'clamp',
   });

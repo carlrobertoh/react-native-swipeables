@@ -17,26 +17,46 @@ import { SwipeableCards } from "react-native-swipeables";
 
 ```typescript jsx
 <SwipeableCards
-  data={[
-    {
-      item: { name: 'Ben' },
-      render: ({ name }) => (
-        <View style={styles.card}>
-          <Text>{name}</Text>
-        </View>
+    data={[
+      {
+        id: 1,
+        imgSrc: require('./assets/1.jpg'),
+      },
+      {
+        id: 2,
+        imgSrc: require('./assets/2.jpg'),
+      },
+    ].map(item => ({
+      item,
+      render: (details: { id: number; imgSrc: ImageSourcePropType }) => (
+          <View style={styles.card}>
+            <Image source={details.imgSrc} style={styles.image} />
+          </View>
       ),
-    },
-    {
-      item: { name: 'Holly' },
-      render: ({ name }) => (
-        <View style={styles.card}>
-          <Text>{name}</Text>
-        </View>
-      ),
-    },
-  ]}
-  onChange={(item, action) => {
-    // handle callback
-  }}
+    }))}
+    onChange={(item, direction) => {
+      // handle callback
+    }}
 />
 ```
+
+```typescript
+const { height: screenHeight, width: screenWidth } = Dimensions.get('window');
+const styles = StyleSheet.create({
+  image: {
+    flex: 1,
+    width: undefined,
+    height: undefined,
+    resizeMode: 'cover',
+    borderRadius: 20,
+  },
+  card: {
+    position: 'absolute',
+    height: screenHeight - 120,
+    width: screenWidth - 16,
+    left: 8,
+    top: 8,
+  },
+});
+```
+
